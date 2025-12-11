@@ -1,4 +1,4 @@
-"""The BWT Ultra Compact Devstral integration."""
+"""The BWT Ultra Compact integration."""
 from __future__ import annotations
 
 import logging
@@ -15,7 +15,7 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up BWT Ultra Compact Devstral from a config entry."""
+    """Set up BWT Ultra Compact from a config entry."""
     hass.data.setdefault(DOMAIN, {})
 
     # Initialize coordinator

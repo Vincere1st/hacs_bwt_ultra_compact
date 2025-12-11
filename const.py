@@ -1,14 +1,14 @@
-"""Constants for the BWT Ultra Compact Devstral integration."""
+"""Constants for the BWT Ultra Compact integration."""
 from __future__ import annotations
 
-DOMAIN = "bwt_ultra_compact_devstral"
+DOMAIN = "bwt_ultra_compact"
 
 # BLE Constants
 BLE_SERVICE_UUID = "D973F2E0-B19E-11E2-9E96-0800200C9A66"
 BLE_BROADCAST_CHARACTERISTIC_UUID = "D973F2E3-B19E-11E2-9E96-0800200C9A66"
 
 # Device info
-DEFAULT_NAME = "BWT Ultra Compact Devstral"
+DEFAULT_NAME = "BWT Ultra Compact"
 MANUFACTURER = "BWT"
 
 # Configuration
