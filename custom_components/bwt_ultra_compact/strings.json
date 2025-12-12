@@ -1,11 +1,9 @@
 {
-  "title": "BWT Ultra Compact Devstral",
-  "description": "Integration for BWT CPED Ultra Compact water softener",
   "config": {
     "step": {
       "user": {
-        "title": "Configure BWT Ultra Compact Devstral",
-        "description": "Enter the MAC address and passkey for your BWT CPED Ultra Compact device.",
+        "title": "Configure BWT Ultra Compact",
+        "description": "Enter the MAC address and passkey for your BWT Ultra Compact device.",
         "data": {
           "mac_address": "MAC Address",
           "passkey": "Passkey"
@@ -15,7 +13,11 @@
     "error": {
       "cannot_connect": "Cannot connect to the device. Please check the MAC address and passkey.",
       "invalid_mac_address": "Invalid MAC address format.",
-      "invalid_passkey": "Passkey must be a 6-digit number."
+      "invalid_passkey": "Passkey must be a 6-digit number.",
+      "unknown": "An unexpected error occurred."
+    },
+    "abort": {
+      "already_configured": "This device is already configured."
     }
   }
 }
