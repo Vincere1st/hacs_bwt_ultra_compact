@@ -1,0 +1,17 @@
+{
+  "repository": "Vincere1st/bwt_ultra_compact",
+  "category": "integration",
+  "name": "BWT Ultra Compact",
+  "description": "Integration for BWT Ultra Compact water softener with Bluetooth connectivity",
+  "homeassistant": "2025.12.0",
+  "render_readme": true,
+  "topics": ["bwt", "water", "softener", "bluetooth"],
+  "keywords": ["bwt", "water", "softener", "bluetooth", "salt"],
+  "author": "Vincere1st",
+  "license": "MIT",
+  "domain": "bwt_ultra_compact",
+  "file": "bwt_ultra_compact",
+  "config_flow": true,
+  "requirements": ["bleak==0.21.0"],
+  "iot": "local_polling"
+}
