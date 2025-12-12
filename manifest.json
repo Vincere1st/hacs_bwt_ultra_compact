@@ -3,10 +3,11 @@
   "name": "BWT Ultra Compact",
   "documentation": "https://github.com/Vincere1st/bwt_ultra_compact",
   "issue_tracker": "https://github.com/Vincere1st/bwt_ultra_compact/issues",
-  "dependencies": ["bluetooth"],
+  "dependencies": [],
   "codeowners": ["@Vincere1st"],
   "requirements": ["bleak==0.21.0"],
   "config_flow": true,
   "iot_class": "local_polling",
-  "version": "0.1.0"
+  "version": "1.0.0",
+  "homeassistant": "2025.12.0"
 }

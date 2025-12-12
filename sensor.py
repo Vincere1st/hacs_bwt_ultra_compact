@@ -1,4 +1,4 @@
-"""Sensor platform for BWT Ultra Compact Devstral integration."""
+"""Sensor platform for BWT Ultra Compact integration."""
 from __future__ import annotations
 
 import logging
@@ -28,7 +28,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the BWT Ultra Compact Devstral sensors."""
+    """Set up the BWT Ultra Compact sensors."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
 
     sensors = []
@@ -50,7 +50,7 @@ async def async_setup_entry(
     async_add_entities(sensors)
 
 class BWTSensor(CoordinatorEntity[BWTCoordinator], SensorEntity):
-    """Representation of a BWT Ultra Compact Devstral sensor."""
+    """Representation of a BWT Ultra Compact sensor."""
 
     def __init__(
         self,

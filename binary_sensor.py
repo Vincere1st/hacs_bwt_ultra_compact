@@ -1,4 +1,4 @@
-"""Binary sensor platform for BWT Ultra Compact Devstral integration."""
+"""Binary sensor platform for BWT Ultra Compact integration."""
 from __future__ import annotations
 
 import logging
@@ -28,7 +28,7 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up the BWT Ultra Compact Devstral binary sensors."""
+    """Set up the BWT Ultra Compact binary sensors."""
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
 
     binary_sensors = []
@@ -49,7 +49,7 @@ async def async_setup_entry(
     async_add_entities(binary_sensors)
 
 class BWTBinarySensor(CoordinatorEntity[BWTCoordinator], BinarySensorEntity):
-    """Representation of a BWT Ultra Compact Devstral binary sensor."""
+    """Representation of a BWT Ultra Compact binary sensor."""
 
     def __init__(
         self,

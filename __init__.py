@@ -16,22 +16,35 @@ PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR]
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up BWT Ultra Compact from a config entry."""
-    hass.data.setdefault(DOMAIN, {})
+    if DOMAIN not in hass.data:
+        hass.data.setdefault(DOMAIN, {})
 
-    # Initialize coordinator
-    coordinator = BWTCoordinator(
-        mac_address=entry.data[CONF_MAC_ADDRESS],
-        passkey=entry.data[CONF_PASSKEY]
-    )
+    # Check if entry already exists
+    if entry.entry_id in hass.data[DOMAIN]:
+        _LOGGER.warning("Entry %s already exists, cleaning up", entry.entry_id)
+        await async_unload_entry(hass, entry)
 
-    hass.data[DOMAIN][entry.entry_id] = {
-        "coordinator": coordinator
-    }
+    try:
+        # Initialize coordinator
+        coordinator = BWTCoordinator(
+            mac_address=entry.data[CONF_MAC_ADDRESS],
+            passkey=entry.data[CONF_PASSKEY]
+        )
 
-    # Forward the setup to the sensor platform
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+        hass.data[DOMAIN][entry.entry_id] = {
+            "coordinator": coordinator
+        }
 
-    return True
+        # Forward the setup to the sensor platform
+        await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+        return True
+
+    except Exception as e:
+        _LOGGER.error("Failed to setup BWT Ultra Compact: %s", e)
+        if entry.entry_id in hass.data[DOMAIN]:
+            hass.data[DOMAIN].pop(entry.entry_id)
+        return False
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""

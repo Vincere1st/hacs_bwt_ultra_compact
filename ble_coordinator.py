@@ -86,41 +86,52 @@ class BWTCoordinator:
             _LOGGER.error("Invalid broadcast data length: %d", len(data))
             return {}
 
-        bytes_data = bytearray(data)
+        try:
+            bytes_data = bytearray(data)
 
-        def get_word(offset: int, little_endian: bool = True) -> int:
-            """Get 2-byte word from data."""
-            if little_endian:
-                return bytes_data[offset] + (bytes_data[offset + 1] << 8)
-            return (bytes_data[offset] << 8) + bytes_data[offset + 1]
+            def get_word(offset: int, little_endian: bool = True) -> int:
+                """Get 2-byte word from data."""
+                if offset + 1 >= len(bytes_data):
+                    return 0
+                if little_endian:
+                    return bytes_data[offset] + (bytes_data[offset + 1] << 8)
+                return (bytes_data[offset] << 8) + bytes_data[offset + 1]
 
-        UINT_MAX = 0xFFFF
+            UINT_MAX = 0xFFFF
 
-        remaining = get_word(0, True) + get_word(2, True) * UINT_MAX
-        total_capacity = get_word(10, True) * 1000
-        bitmask = bytes_data[12] if len(bytes_data) > 12 else 0
+            remaining = get_word(0, True) + get_word(2, True) * UINT_MAX
+            total_capacity = get_word(10, True) * 1000
+            bitmask = bytes_data[12] if len(bytes_data) > 12 else 0
 
-        # Calculate salt percentage
-        if total_capacity <= 0:
-            salt_percentage = 0
-        else:
-            percentage = remaining / total_capacity
-            if percentage > 500:  # Protect against int wrapping
-                percentage = 0
-            salt_percentage = max(0, min(1, percentage))
+            # Calculate salt percentage with proper error handling
+            if total_capacity <= 0:
+                salt_percentage = 0.0
+            else:
+                try:
+                    percentage = remaining / total_capacity
+                    if percentage > 500:  # Protect against int wrapping
+                        percentage = 0.0
+                    salt_percentage = max(0.0, min(100.0, percentage * 100.0))  # Convert to percentage
+                except (ZeroDivisionError, OverflowError) as e:
+                    _LOGGER.error("Error calculating salt percentage: %s", e)
+                    salt_percentage = 0.0
 
-        return {
-            "remaining_salt": remaining,
-            "total_capacity": total_capacity,
-            "salt_percentage": salt_percentage,
-            "quarter_hours_idx": get_word(4, True),
-            "days_idx": get_word(6, True),
-            "regen_count": get_word(8, True),
-            "alarm": bool(bitmask & 0x01),
-            "quarter_hours_looped": bool(bitmask & 0x02),
-            "days_looped": bool(bitmask & 0x04),
-            "version": f"{bytes_data[13]}, {bytes_data[14]}" if len(bytes_data) > 14 else "Unknown",
-        }
+            return {
+                "remaining_salt": remaining,
+                "total_capacity": total_capacity,
+                "salt_percentage": salt_percentage,
+                "quarter_hours_idx": get_word(4, True),
+                "days_idx": get_word(6, True),
+                "regen_count": get_word(8, True),
+                "alarm": bool(bitmask & 0x01),
+                "quarter_hours_looped": bool(bitmask & 0x02),
+                "days_looped": bool(bitmask & 0x04),
+                "version": f"{bytes_data[13]}.{bytes_data[14]}" if len(bytes_data) > 14 else "Unknown",
+            }
+
+        except Exception as e:
+            _LOGGER.error("Failed to parse broadcast data: %s", e)
+            return {}
 
     async def update(self) -> None:
         """Update data from the device."""
